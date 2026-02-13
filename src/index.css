@@ -483,11 +483,7 @@ select.input-modern {
   }
 
   /* Hide everything except the printable deed */
-  body>*:not(#root) {
-    display: none !important;
-  }
-
-  #root>* {
+  body>*:not(.printable-deed) {
     display: none !important;
   }
 

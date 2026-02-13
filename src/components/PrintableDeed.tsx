@@ -5,7 +5,17 @@ interface PrintableDeedProps {
     data: DeedData;
 }
 
+import { createPortal } from 'react-dom';
+import { useEffect, useState } from 'react';
+
 export function PrintableDeed({ data }: PrintableDeedProps) {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        return () => setMounted(false);
+    }, []);
+
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
@@ -16,7 +26,9 @@ export function PrintableDeed({ data }: PrintableDeedProps) {
 
     const priceInWords = numberToWords(parseInt(data.sale.price));
 
-    return (
+    if (!mounted) return null;
+
+    return createPortal(
         <div className="printable-deed bg-white text-black max-w-full"
             style={{ padding: '5mm' }}>
             <div className="text-center mb-8">
@@ -32,7 +44,7 @@ export function PrintableDeed({ data }: PrintableDeedProps) {
 
             <div className="space-y-5 text-[11px] leading-relaxed font-serif text-justify">
                 <p className="font-medium">
-                    I, <span className="font-bold">{data.seller.title} {data.seller.fullName}</span>, holding CID No. <span className="font-bold underline">{data.seller.cidNumber}</span> from {data.seller.gewog}, {data.seller.dzongkhag}, hereby undersigned, hereby apply for the sale deed of the following vehicle model <span className="font-bold">{data.vehicle.model}</span> with vehicle registration number <span className="font-bold underline">{data.vehicle.registrationNumber}</span> to here buyer <span className="font-bold">{data.buyer.title} {data.buyer.fullName}</span> holding CID No. <span className="font-bold underline">{data.buyer.cidNumber}</span> of {data.buyer.gewog} (Gewog), {data.buyer.dzongkhag} (Dzongkhag). The above-mentioned vehicle Chassis No. <span className="font-bold">{data.vehicle.chassisNumber}</span> and Engine number <span className="font-bold">{data.vehicle.engineNumber}</span> simultaneously. I agree to sell the above-mentioned vehicle to you for the sum of <span className="font-bold underline">Nu. {parseInt(data.sale.price).toLocaleString()}</span> (<span className="capitalize italic">{priceInWords}</span> only).
+                    I, <span className="font-bold">{data.seller.title} {data.seller.fullName}</span>, holding CID No. <span className="font-bold underline">{data.seller.cidNumber}</span> from {data.seller.gewog}, {data.seller.dzongkhag}, hereby undersigned, hereby apply for the sale deed of the following vehicle model <span className="font-bold">{data.vehicle.model}</span> with vehicle registration number <span className="font-bold underline">{data.vehicle.registrationNumber}</span> to the buyer <span className="font-bold">{data.buyer.title} {data.buyer.fullName}</span> holding CID No. <span className="font-bold underline">{data.buyer.cidNumber}</span> of {data.buyer.gewog} (Gewog), {data.buyer.dzongkhag} (Dzongkhag). The above-mentioned vehicle Chassis No. <span className="font-bold">{data.vehicle.chassisNumber}</span> and Engine number <span className="font-bold">{data.vehicle.engineNumber}</span> simultaneously. I agree to sell the above-mentioned vehicle to you for the sum of <span className="font-bold underline">Nu. {parseInt(data.sale.price).toLocaleString()}</span> (<span className="capitalize italic">{priceInWords}</span> only).
                 </p>
 
                 <div className="space-y-3 pl-4">
@@ -136,6 +148,7 @@ export function PrintableDeed({ data }: PrintableDeedProps) {
                     Vehicle Sale and Transfer Agreement
                 </p>
             </div>
-        </div >
+        </div >,
+        document.body
     );
 }
