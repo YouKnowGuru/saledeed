@@ -127,11 +127,9 @@ export function generateSaleDeedPDF(data: DeedData): jsPDF {
     doc.setTextColor(0); // Black
     doc.setFontSize(9);
 
-    // Name value with dotted underline
+    // Name value with underline
     doc.text(name, margin + 5, yPos + 19);
-    doc.setLineDash([1, 1], 0);
     doc.line(margin + 5, yPos + 20, margin + (contentWidth / 2) - 5, yPos + 20);
-    doc.setLineDash([], 0);
 
     // Column 2: CID
     const col2X = margin + (contentWidth / 2) + 5;
@@ -143,11 +141,9 @@ export function generateSaleDeedPDF(data: DeedData): jsPDF {
     doc.setTextColor(0);
     doc.setFontSize(9);
 
-    // CID value with dotted underline
+    // CID value with underline
     doc.text(cid, col2X, yPos + 19);
-    doc.setLineDash([1, 1], 0);
     doc.line(col2X, yPos + 20, margin + contentWidth - 5, yPos + 20);
-    doc.setLineDash([], 0);
   };
 
   drawPartyBox('Seller', data.seller.fullName, data.seller.cidNumber, y);
